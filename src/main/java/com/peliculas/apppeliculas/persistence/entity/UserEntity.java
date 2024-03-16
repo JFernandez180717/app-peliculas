@@ -1,17 +1,20 @@
 package com.peliculas.apppeliculas.persistence.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.peliculas.apppeliculas.persistence.audit.AuditableEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.List;
 
 @Entity
 @Table(name = "user")
+@EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserEntity {
+public class UserEntity extends AuditableEntity{
   @Id
   @Column(nullable = false, length = 45)
   private String username;

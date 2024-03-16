@@ -1,19 +1,26 @@
 package com.peliculas.apppeliculas.service;
 
 import com.peliculas.apppeliculas.persistence.entity.UserEntity;
+import com.peliculas.apppeliculas.persistence.entity.UserRoleEntity;
 import com.peliculas.apppeliculas.persistence.repository.UserRepository;
+import com.peliculas.apppeliculas.persistence.repository.UserRoleRepository;
+import com.peliculas.apppeliculas.service.dto.UserDto;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class UserService {
   private final UserRepository userRepository;
+  private final UserRoleRepository userRoleRepository;
 
   @Autowired
-  public UserService(UserRepository userRepository) {
+  public UserService(UserRepository userRepository, UserRoleRepository userRoleRepository) {
     this.userRepository = userRepository;
+    this.userRoleRepository = userRoleRepository;
   }
 
   public List<UserEntity> findAll() {
@@ -32,7 +39,23 @@ public class UserService {
     return this.userRepository.findByEmail(email).orElse(null);
   }
 
-  public void createUser(UserEntity user) {
-    this.userRepository.save(user);
+  @Transactional
+  public UserEntity create(UserDto user) throws Exception{
+    UserEntity newUser = new UserEntity();
+    newUser.setUsername(user.getUsername());
+    newUser.setEmail(user.getEmail());
+    newUser.setPassword(user.getPassword());
+    newUser.setName(user.getName());
+    newUser.setLastName(user.getLastName());
+    newUser.setAge(user.getAge());
+    newUser.setStatus(user.isStatus());
+    newUser.setGender(user.getGender());
+    UserEntity userCreated = this.userRepository.save(newUser);
+    UserRoleEntity newUserRole = new UserRoleEntity();
+    List<UserRoleEntity> roles = user.getRoles();
+    for (UserRoleEntity role: roles) {
+      this.userRoleRepository.save(role);
+    }
+    return userCreated;
   }
 }

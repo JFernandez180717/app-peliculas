@@ -2,12 +2,10 @@ package com.peliculas.apppeliculas.web.controller;
 
 import com.peliculas.apppeliculas.persistence.entity.UserEntity;
 import com.peliculas.apppeliculas.service.UserService;
+import com.peliculas.apppeliculas.service.dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -53,6 +51,16 @@ public class UserController {
     try {
       return ResponseEntity.ok(this.userService.findByEmail(email));
     } catch (Exception e) {
+      return ResponseEntity.internalServerError().build();
+    }
+  }
+
+  @PostMapping("/create")
+  public ResponseEntity<UserEntity> create(@RequestBody UserDto user) {
+    try {
+      return ResponseEntity.ok(this.userService.create(user));
+    } catch (Exception e) {
+      e.printStackTrace();
       return ResponseEntity.internalServerError().build();
     }
   }
