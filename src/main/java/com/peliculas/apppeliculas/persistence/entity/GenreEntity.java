@@ -1,5 +1,6 @@
 package com.peliculas.apppeliculas.persistence.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,8 +18,8 @@ public class GenreEntity {
   @Column(nullable = false, length = 45)
   private String username;
 
-  @OneToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "genre", referencedColumnName = "genre")
+  @OneToOne(mappedBy = "genre", fetch = FetchType.LAZY)
+  @JsonIgnore
   private MovieEntity movie;
 
   @ManyToOne

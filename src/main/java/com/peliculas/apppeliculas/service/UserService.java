@@ -9,7 +9,6 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -57,5 +56,33 @@ public class UserService {
       this.userRoleRepository.save(role);
     }
     return userCreated;
+  }
+
+  public UserEntity update(UserDto user) {
+    UserEntity userUpdate = this.userRepository.findById(user.getUsername()).orElse(null);
+    if (userUpdate == null) {
+      return null;
+    }
+    userUpdate.setEmail(user.getEmail());
+    userUpdate.setPassword(user.getPassword());
+    userUpdate.setName(user.getName());
+    userUpdate.setLastName(user.getLastName());
+    userUpdate.setAge(user.getAge());
+    userUpdate.setGender(user.getGender());
+    return this.userRepository.save(userUpdate);
+  }
+
+  @Transactional
+  public void delete(String username) throws Exception{
+    UserEntity user = this.userRepository.findById(username).orElse(null);
+    List<UserRoleEntity> roles = user.getRoles();
+    for (UserRoleEntity rol: roles) {
+      this.userRoleRepository.delete(rol);
+    }
+    this.userRepository.deleteById(username);
+  }
+
+  public boolean exists(String username) {
+    return this.userRepository.existsById(username);
   }
 }

@@ -13,7 +13,7 @@ import lombok.Setter;
 public class MovieComment {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private int id;
+  private Integer id;
 
   @Column(name = "movie_id", nullable = false)
   private int movieId;

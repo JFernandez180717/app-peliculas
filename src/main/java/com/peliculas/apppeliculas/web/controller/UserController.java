@@ -24,7 +24,7 @@ public class UserController {
     try {
       return ResponseEntity.ok(this.userService.findAll());
     } catch (Exception e) {
-      return ResponseEntity.internalServerError().build();
+      return ResponseEntity.badRequest().build();
     }
   }
 
@@ -33,7 +33,7 @@ public class UserController {
     try {
       return ResponseEntity.ok(this.userService.findById(username));
     } catch (Exception e) {
-      return ResponseEntity.internalServerError().build();
+      return ResponseEntity.badRequest().build();
     }
   }
 
@@ -42,7 +42,7 @@ public class UserController {
     try {
       return ResponseEntity.ok(this.userService.findActiveUsers(status));
     } catch (Exception e) {
-      return ResponseEntity.internalServerError().build();
+      return ResponseEntity.badRequest().build();
     }
   }
 
@@ -51,7 +51,7 @@ public class UserController {
     try {
       return ResponseEntity.ok(this.userService.findByEmail(email));
     } catch (Exception e) {
-      return ResponseEntity.internalServerError().build();
+      return ResponseEntity.badRequest().build();
     }
   }
 
@@ -61,7 +61,35 @@ public class UserController {
       return ResponseEntity.ok(this.userService.create(user));
     } catch (Exception e) {
       e.printStackTrace();
-      return ResponseEntity.internalServerError().build();
+      return ResponseEntity.badRequest().build();
+    }
+  }
+
+  @PutMapping("/update")
+  public ResponseEntity<UserEntity> update(@RequestBody UserDto user) {
+    try {
+      UserEntity userUpdate = this.userService.update(user);
+      if (userUpdate != null) {
+        return ResponseEntity.ok(userUpdate);
+      }
+      return ResponseEntity.noContent().build();
+    } catch (Exception e) {
+      e.printStackTrace();
+      return ResponseEntity.badRequest().build();
+    }
+  }
+
+  @DeleteMapping("/delete/{username}")
+  public ResponseEntity<Void> delete(@PathVariable("username") String username) {
+    try {
+      if (this.userService.exists(username)) {
+        this.userService.delete(username);
+        return ResponseEntity.ok().build();
+      }
+      return ResponseEntity.badRequest().build();
+    } catch (Exception e) {
+      e.printStackTrace();
+      return ResponseEntity.badRequest().build();
     }
   }
 }
