@@ -1,5 +1,6 @@
 package com.peliculas.apppeliculas.persistence.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,6 +40,7 @@ public class MovieEntity {
 
   @ManyToOne
   @JoinColumn(name = "username", referencedColumnName = "username", insertable = false, updatable = false)
+  @JsonIgnore
   private UserEntity user;
 
 }

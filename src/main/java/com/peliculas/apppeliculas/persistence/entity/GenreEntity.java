@@ -24,5 +24,6 @@ public class GenreEntity {
 
   @ManyToOne
   @JoinColumn(name = "username", referencedColumnName = "username", insertable = false, updatable = false)
+  @JsonIgnore
   private UserEntity user;
 }

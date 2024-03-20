@@ -24,4 +24,8 @@ public class MovieService {
   public Optional<MovieEntity> findById(int movieId) {
     return this.movieRepository.findById(movieId);
   }
+
+  public List<MovieEntity> findByYear(String year) {
+    return this.movieRepository.findByYear(year);
+  }
 }

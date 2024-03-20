@@ -41,4 +41,14 @@ public class MovieController {
       return ResponseEntity.badRequest().build();
     }
   }
+
+  @GetMapping("/year/{year}")
+  public ResponseEntity<List<MovieEntity>> findByYear(@PathVariable("year") String year) {
+    try {
+      return ResponseEntity.ok(this.movieService.findByYear(year));
+    } catch (Exception e) {
+      e.printStackTrace();
+      return ResponseEntity.badRequest().build();
+    }
+  }
 }
